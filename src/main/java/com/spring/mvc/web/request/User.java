@@ -18,11 +18,12 @@ public class User {
     private String userName;
     private List<String> hobby;
 
-    //기본 생성자 필수!
+    //기본 생성자 필수! (사용되는지 확인하기 위해서 만들었음)
     public User() {
         System.out.println("User 커맨드 객체 생성됨!");
     }
 
+    //(사용되는지 확인하기 위해서 만들었음)
     public void setHobby(List<String> hobby) {
         System.out.println("hobby Setter 호출됨!");
         this.hobby = hobby;
