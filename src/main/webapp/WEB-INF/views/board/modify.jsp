@@ -20,14 +20,14 @@
         <p># 작성자 : <input type="text" name="newWriter"></p>
         <p># 제목 : <input type="text" name="newTitle"></p>
         <p># 내용 : <br> <input type="text" name="newContent"></p> -->
-            <input type="hidden" name="bulNum" value="${board2.boardNo}">
+        <input type="hidden" name="bulNum" value="${board2.boardNo}">
         <p># 글번호 : ${board2.boardNo}</p>
         <p># 작성자 : <input type="text" value="${board2.writer}" name="newWriter"></p>
         <p># 제목 : <input type="text" value="${board2.title}" name="newTitle"></p>
         <p># 내용 : <br> <input type="text" value="${board2.content}" name="newContent"></p>
 
         <div>
-            <button type="submit">수정</button>
+            <button type="submit">저장</button>
         </div>
         
     </form>

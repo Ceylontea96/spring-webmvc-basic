@@ -81,6 +81,15 @@ public class BoardController {
         return "redirect:/board/detail?bulNum=" + bulNum;
     }
 
+    //게시글 추천 요청
+    @PostMapping("/recommend")
+    public String recommend(int bulNum, Model model) {
+        Board board = boardService.viewDetail(bulNum);
+        log.info("추천수" + board.getRecommend());
+        board.setRecommend(board.getRecommend()+1);
+        model.addAttribute("board", board);
+        return "board/detail";
+    }
 
 
 

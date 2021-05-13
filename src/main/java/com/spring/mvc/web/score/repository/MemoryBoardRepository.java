@@ -19,9 +19,9 @@ public class MemoryBoardRepository implements BoardRepository {
 
     //초기 데이터
     static {
-        boardMap.put(1, new Board("1", "2", "3"));
-        boardMap.put(2, new Board("qkqh", "가나다라마바사", "3"));
-        boardMap.put(3, new Board("멍청이", "이렇고 저렇고", "3"));
+        boardMap.put(1, new Board("둘리", "아이~씻팔!!!", "초능력 맛 좀 볼래?"));
+        boardMap.put(2, new Board("도우너", "떨 한대 할래?", "한대 말아줄까?"));
+        boardMap.put(3, new Board("고길동", "이렇게는 못살아!!!", "여긴 내 돈 주고 산 내 집이야!!!"));
     }
     @Override
     public void save(Board board) {

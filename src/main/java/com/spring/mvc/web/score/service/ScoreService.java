@@ -4,6 +4,7 @@ package com.spring.mvc.web.score.service;
 import com.spring.mvc.web.score.domain.Score;
 import com.spring.mvc.web.score.repository.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class ScoreService {
     private final ScoreRepository scoreRepository; //final 붙이고 alt + Enter로 매개변수 추가, 아래와 같은 생성자가 만들어지면 @Autowired 추가
 
     @Autowired
-    public ScoreService(ScoreRepository scoreRepository) {
+    public ScoreService(@Qualifier("jr") ScoreRepository scoreRepository) {
         this.scoreRepository = scoreRepository;
     }
 

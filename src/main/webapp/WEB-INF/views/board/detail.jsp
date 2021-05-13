@@ -15,9 +15,18 @@
     <p># 글번호 : ${board.boardNo}</p>
     <p># 작성자 : ${board.writer}</p>
     <p># 제목 : ${board.title}</p>
+    <p># 추천수 : ${board.recommend}</p>
+    <p># 조회수 : ${board.views}</p>
     <p># 내용 : <br> ${board.content}</p>
 
     <a href="/board/list">글 목록보기</a>
     <a href="/board/modify?bulNum=${board.boardNo}">글 수정하기</a>
+
+    <form action="/board/recommend" method="POST">
+        <input type="hidden" name="bulNum" value="${board.boardNo}">
+        <div>
+            <button type="submit">추천</button>
+        </div>
+    </form>
 </body>
 </html>

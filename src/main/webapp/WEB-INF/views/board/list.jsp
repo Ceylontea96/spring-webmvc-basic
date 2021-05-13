@@ -32,6 +32,8 @@
                 <td>번호</td>
                 <td>작성자</td>
                 <td>제목</td>
+                <td>조회수</td>
+                <td>추천수</td>
                 <td>비고</td>
             </tr>
             <c:forEach var="board1" items="${boardList}">
@@ -39,6 +41,8 @@
                     <td>${board1.boardNo}</td>
                     <td>${board1.writer}</td>
                     <td><a href="/board/detail?bulNum=${board1.boardNo}">${board1.title}</a></td>
+                    <td>${board1.views}</td>
+                    <td>${board1.recommend}</td>
                     <td><a href="/board/delete?bulNum=${board1.boardNo}">[삭제]</a></td>
                 </tr>
             </c:forEach>
