@@ -2,7 +2,9 @@ package com.spring.mvc.web.score.service;
 
 
 import com.spring.mvc.web.score.domain.Score;
+import com.spring.mvc.web.score.repository.ScoreMapper;
 import com.spring.mvc.web.score.repository.ScoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,14 +12,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service //스프링이 서비스를 이용하기 위해서는 어노테이션을 넣어줘야한다.
+@RequiredArgsConstructor
 public class ScoreService {
 
-    private final ScoreRepository scoreRepository; //final 붙이고 alt + Enter로 매개변수 추가, 아래와 같은 생성자가 만들어지면 @Autowired 추가
-
-    @Autowired
-    public ScoreService(@Qualifier("jr") ScoreRepository scoreRepository) {
-        this.scoreRepository = scoreRepository;
-    }
+//    private final ScoreRepository scoreRepository; //final 붙이고 alt + Enter로 매개변수 추가, 아래와 같은 생성자가 만들어지면 @Autowired 추가
+//
+//    @Autowired
+//    public ScoreService( ScoreRepository scoreRepository) {
+//        this.scoreRepository = scoreRepository;
+//    }
+    private final ScoreMapper scoreRepository;
 
     public void register(Score score) {
         score.calcTotalAvg();
@@ -37,5 +41,10 @@ public class ScoreService {
     //상세 정보 조회 기능
     public Score viewDetail(int stuNum) {
         return scoreRepository.findOne(stuNum);
+    }
+
+    //성적 정보 건수 조회 기능능
+   public int getCount() {
+        return scoreRepository.getCount();
     }
 }

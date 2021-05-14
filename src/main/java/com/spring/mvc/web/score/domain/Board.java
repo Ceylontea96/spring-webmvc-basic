@@ -25,7 +25,7 @@ public class Board {
     private String content; //게시글 내용
     private int views; //게시글 조회수
     private int recommend; //게시글 추천수
-    private LocalDateTime postTime; //게시글 작성 시간
+//    private LocalDateTime postTime; //게시글 작성 시간
 
     public Board() {
         this.boardNo = ++sequence;
@@ -36,7 +36,7 @@ public class Board {
         this.writer = writer;
         this.title = title;
         this.content = content;
-        this.postTime = LocalDateTime.now();
+//        this.postTime = LocalDateTime.now();
     }
 
     public Board(ResultSet rs) throws SQLException {
@@ -46,7 +46,11 @@ public class Board {
         this.content = rs.getString("content");
         this.recommend = rs.getInt("recommend");
         this.views = rs.getInt("views");
-        this.postTime = (rs.getTimestamp("post_time")).toLocalDateTime();
+//        this.postTime = (rs.getTimestamp("post_time")).toLocalDateTime();
+    }
+
+    public void plusViews() {
+        this.views++;
     }
 
 

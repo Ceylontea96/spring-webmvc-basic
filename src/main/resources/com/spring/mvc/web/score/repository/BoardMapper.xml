@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mvc.web.score.repository.BoardMapper">
+
+    <insert id="save">
+        INSERT INTO board
+            (board_no, writer, title, content)
+        VALUES
+            (seq_board.nextval, #{writer}, #{title}, #{content})
+    </insert>
+
+    <delete id="remove">
+        DELETE FROM board WHERE board_no = #{bulNum}
+    </delete>
+
+    <!--    SELECT문 처리를 위한 자바 필드와 테이블 컬럼명 매핑-->
+    <!--    resultMap: 자바의 이름규칙과 SQL의 이름규칙이 다를 때 매핑 처리  -->
+    <!--    id 속성에는 이 맵의 이름을 만들어주고 type 속성에는 해당 클래스 전체경로-->
+    <resultMap id="boardMap" type="com.spring.mvc.web.score.domain.Board">
+        <!--        property 속성에는 자바필드명, column은 테이블 컬럼명    -->
+        <result property="boardNo" column="board_no" />
+        <result property="postTime" column="post_time" />
+    </resultMap>
+
+    <select id="findOne" resultMap="boardMap">
+        SELECT * FROM board WHERE board_no = ${bulNum}
+    </select>
+
+    <select id="viewMore" resultMap="boardMap">
+        SELECT * FROM board WHERE board_no = ${bulNum}
+    </select>
+
+    <select id="findAll" resultMap="boardMap">
+        SELECT * FROM board ORDER BY board_no desc
+    </select>
+
+    <update id="change">
+        UPDATE board
+        SET title = #{newTitle},
+            writer= #{newWriter},
+            content = #{newContent}
+        WHERE board_no = #{bulNum}
+    </update>
+
+    <update id="plusRec">
+        UPDATE board
+        SET recommend = recommend + 1
+        WHERE board_no = #{bulNum}
+    </update>
+
+    <update id="plusViews">
+        UPDATE board
+        SET views = views + 1
+        WHERE board_no = #{bulNum}
+    </update>
+
+</mapper>

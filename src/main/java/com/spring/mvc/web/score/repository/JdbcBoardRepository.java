@@ -23,10 +23,10 @@ public class JdbcBoardRepository implements BoardRepository{
     @Override
     public void save(Board board) {
         String sql = "INSERT INTO board VALUES " +
-                "(seq_board.nextval, ?, ?, ?, ?, ?, ?)";
+                "(seq_board.nextval, ?, ?, ?, ?, ?)";
         //번호(시퀀스 이용), 작성자, 제목, 내용, 추천, 조회수
         template.update(sql, board.getWriter(), board.getTitle(), board.getContent()
-                , board.getRecommend(), board.getViews(), Timestamp.valueOf(board.getPostTime()) );
+                , board.getRecommend(), board.getViews());
     }
 
     @Override

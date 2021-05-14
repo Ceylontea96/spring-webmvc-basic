@@ -40,7 +40,7 @@
                 <tr>
                     <td>${board1.boardNo}</td>
                     <td>${board1.writer}</td>
-                    <td><a href="/board/detail?bulNum=${board1.boardNo}">${board1.title}</a></td>
+                    <td><a href="/board/detail?bulNum=${board1.boardNo}&vf=true">${board1.title}</a></td>
                     <td>${board1.views}</td>
                     <td>${board1.recommend}</td>
                     <td><a href="/board/delete?bulNum=${board1.boardNo}">[삭제]</a></td>

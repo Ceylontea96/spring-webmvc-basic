@@ -23,12 +23,12 @@ class JdbcBoardRepositoryTest {
     @Test
     void saveTest() {
         Board board = new Board();
-        board.setWriter("둘리");
-        board.setTitle("호잇");
-        board.setContent("초능력 맛 좀 봐라!");
+        board.setWriter("도우너");
+        board.setTitle("코스모스");
+        board.setContent("깐따삐야!");
         board.setRecommend(0);
         board.setViews(0);
-        board.setPostTime(LocalDateTime.now());
+//        board.setPostTime(LocalDateTime.now());
         repository.save(board);
     }
 

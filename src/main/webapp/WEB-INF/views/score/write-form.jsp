@@ -56,6 +56,8 @@
 
     <ul class="score-list">
 
+        <li>총 학생 수 : ${count}명</li>
+
         <c:forEach var="score" items="${scoreList}">
             <li># 학번: ${score.stuNum}, 
                 이름: <a href="/score/detail?stuNum=${score.stuNum}">${score.name}</a>, 

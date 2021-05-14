@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class BoardController {
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
-
 
 
     //게시글 목록화면 요청
@@ -59,38 +59,47 @@ public class BoardController {
 
     //게시글 상세 보기 요청
     @GetMapping("/detail")
-    public String detail(int bulNum, Model model) {
-        Board board = boardService.viewDetail(bulNum);
+    public String detail(int bulNum
+            , @RequestParam("vf") boolean viewCntFlag
+            , Model model
+    ) {
+        Board board = boardService.viewDetail(bulNum, viewCntFlag);
         model.addAttribute("board", board);
         return "board/detail";
     }
 
     //게시글 수정 화면 요청
     @GetMapping("/modify")
-    public String modify(int bulNum, Model model) {
-        Board board = boardService.viewDetail(bulNum);
+    public String modify(int bulNum
+            , @RequestParam("vf") boolean viewCntFlag
+            , Model model
+    ) {
+        Board board = boardService.viewDetail(bulNum, viewCntFlag);
         model.addAttribute("board2", board);
         return "board/modify";
     }
 
     //게시글 수정 저장 요청
     @PostMapping("/modify")
-    public String modify1(int bulNum, DummyBoard dumBoard) {
+    public String modify1(int bulNum
+            , DummyBoard dumBoard
+    ) {
         log.info("bulNum: " + bulNum);
         boardService.modify(bulNum, dumBoard);
-        return "redirect:/board/detail?bulNum=" + bulNum;
+        return "redirect:/board/detail?bulNum=" + bulNum + "&vf=false";
     }
 
     //게시글 추천 요청
     @PostMapping("/recommend")
-    public String recommend(int bulNum, Model model) {
-        Board board = boardService.viewDetail(bulNum);
-        board.setRecommend(board.getRecommend()+1);
+    public String recommend(int bulNum
+            , @RequestParam("vf") boolean viewCntFlag
+            , Model model
+    ) {
+        boardService.plusRecommend(bulNum);
+        Board board = boardService.viewDetail(bulNum, viewCntFlag);
         log.info("추천수" + board.getRecommend());
         model.addAttribute("board", board);
         return "board/detail";
     }
-
-
 
 }

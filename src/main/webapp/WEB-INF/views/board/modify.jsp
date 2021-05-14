@@ -16,11 +16,8 @@
 
     <form action="/board/modify" method="POST">
 
-        <!-- <p># 글번호 : ${board2.boardNo}</p>
-        <p># 작성자 : <input type="text" name="newWriter"></p>
-        <p># 제목 : <input type="text" name="newTitle"></p>
-        <p># 내용 : <br> <input type="text" name="newContent"></p> -->
         <input type="hidden" name="bulNum" value="${board2.boardNo}">
+        <input type="hidden" name="vf" value="false">
         <p># 글번호 : ${board2.boardNo}</p>
         <p># 작성자 : <input type="text" value="${board2.writer}" name="newWriter"></p>
         <p># 제목 : <input type="text" value="${board2.title}" name="newTitle"></p>

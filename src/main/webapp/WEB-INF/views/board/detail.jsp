@@ -20,10 +20,11 @@
     <p># 내용 : <br> ${board.content}</p>
 
     <a href="/board/list">글 목록보기</a>
-    <a href="/board/modify?bulNum=${board.boardNo}">글 수정하기</a>
+    <a href="/board/modify?bulNum=${board.boardNo}&vf=false">글 수정하기</a>
 
     <form action="/board/recommend" method="POST">
         <input type="hidden" name="bulNum" value="${board.boardNo}">
+        <input type="hidden" name="vf" value="false">
         <div>
             <button type="submit">추천</button>
         </div>
