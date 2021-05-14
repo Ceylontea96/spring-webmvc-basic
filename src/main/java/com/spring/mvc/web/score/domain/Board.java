@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.xml.transform.Result;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -34,5 +38,16 @@ public class Board {
         this.content = content;
         this.postTime = LocalDateTime.now();
     }
+
+    public Board(ResultSet rs) throws SQLException {
+        this.boardNo = rs.getInt("board_no");
+        this.writer = rs.getString("writer");
+        this.title = rs.getString("title");
+        this.content = rs.getString("content");
+        this.recommend = rs.getInt("recommend");
+        this.views = rs.getInt("views");
+        this.postTime = (rs.getTimestamp("post_time")).toLocalDateTime();
+    }
+
 
 }

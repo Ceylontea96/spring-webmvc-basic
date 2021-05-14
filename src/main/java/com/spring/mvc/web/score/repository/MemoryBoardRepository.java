@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Repository("mbr")
 @Log4j2
 public class MemoryBoardRepository implements BoardRepository {
 

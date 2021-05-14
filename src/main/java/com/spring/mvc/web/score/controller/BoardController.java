@@ -85,8 +85,8 @@ public class BoardController {
     @PostMapping("/recommend")
     public String recommend(int bulNum, Model model) {
         Board board = boardService.viewDetail(bulNum);
-        log.info("추천수" + board.getRecommend());
         board.setRecommend(board.getRecommend()+1);
+        log.info("추천수" + board.getRecommend());
         model.addAttribute("board", board);
         return "board/detail";
     }

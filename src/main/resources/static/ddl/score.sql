@@ -12,3 +12,18 @@ CREATE TABLE score (
 );
 
 SELECT * FROM score;
+
+
+//게시판
+CREATE SEQUENCE SEQ_BOARD;
+
+CREATE TABLE board (
+    board_no NUMBER(10),
+    writer VARCHAR2(50) NOT NULL,
+    title VARCHAR2(200) NOT NULL,
+    content VARCHAR2(3000),
+    recommend NUMBER(4),
+    views NUMBER(5),
+    post_time DATE NOT NULL,
+    CONSTRAINT pk_board PRIMARY KEY (board_no)
+);
