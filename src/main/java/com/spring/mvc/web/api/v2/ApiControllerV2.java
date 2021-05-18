@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,8 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 // API를 만들 때 사용하는 컨트롤러 아노테이션
+// @ResponseBody를 붙이지 않아도 됨(RestController에 포함되어있음)
 @RestController
 @RequestMapping("/api/v2")
+@CrossOrigin // 다른 서버에서 요청이 올 때 CORS 정책을 해제한다.
 public class ApiControllerV2 {
     //크롬에서 json viewer 확장앱 추가
 
