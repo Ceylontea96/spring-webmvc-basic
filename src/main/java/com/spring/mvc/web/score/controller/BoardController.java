@@ -5,15 +5,12 @@ import com.spring.mvc.web.common.paging.PageMaker;
 import com.spring.mvc.web.score.domain.Board;
 import com.spring.mvc.web.score.domain.DummyBoard;
 import com.spring.mvc.web.score.service.BoardService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+//import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,10 +29,11 @@ public class BoardController {
 
     //게시글 목록화면 요청
     @GetMapping("/list")
-    public String list(Criteria criteria, Model model) {
+    public String list(@ModelAttribute("cri") Criteria criteria, Model model) {
+        log.info("get amount : " + criteria);
         model.addAttribute("boardList", boardService.getBoardList(criteria));
         //페이지 정보 만들어서 jsp에게 보내기
-        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotal()));
+        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotal(criteria)));
 
         return "board/list";
     }
@@ -65,10 +63,12 @@ public class BoardController {
     @GetMapping("/detail")
     public String detail(int bulNum
             , @RequestParam("vf") boolean viewCntFlag
+            , @ModelAttribute("cri") Criteria criteria//요청시에 바로 Model에 받아서 보낼 수 있음
             , Model model
     ) {
         Board board = boardService.viewDetail(bulNum, viewCntFlag);
         model.addAttribute("board", board);
+//        model.addAttribute("cri", criteria);
         return "board/detail";
     }
 
@@ -105,5 +105,7 @@ public class BoardController {
         model.addAttribute("board", board);
         return "board/detail";
     }
+
+
 
 }

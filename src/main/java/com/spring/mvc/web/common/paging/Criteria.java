@@ -8,10 +8,14 @@ import lombok.ToString;
 
 //페이징, 검색 정보 객체
 @Getter
+@Setter
 public class Criteria {
 
     private int page;       //페이지 넘버
     private int amount;     //한 페이지당 게시물 수
+
+    private String type;    //검색 조건
+    private String keyword; //검색어
 
     //기본 생성자에 설정된 값에 따라 값을 주지 않을때의 기본 설정값이 정해진다.
     public Criteria() {

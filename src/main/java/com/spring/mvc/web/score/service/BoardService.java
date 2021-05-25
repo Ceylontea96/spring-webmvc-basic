@@ -32,12 +32,14 @@ public class BoardService {
 
     // 게시글 목록을 받아오는 기능 (내림차순)
     public List<Board> getBoardList(Criteria criteria) {
-        return boardRepository.findAll(criteria);
+//        return boardRepository.findAll(criteria);
+        return boardRepository.getSearchArticles(criteria);
+        //페이징, 검색 쿼리 적용버전
     }
 
     //총 게시물 수 확인
-    public int getTotal() {
-        return boardRepository.getTotalCount();
+    public int getTotal(Criteria criteria) {
+        return boardRepository.getTotalCount(criteria);
     }
 
     // 게시글 삭제 기능

@@ -27,10 +27,13 @@ public interface BoardMapper {
     List<Board> findAll();
 
     // 2. 페이징 쿼리 추가 버전
-    List<Board> findAll(Criteria creteria);
+    List<Board> findAll(Criteria criteria);
+
+    // 3. 검색 쿼리 추가버전
+    List<Board> getSearchArticles(Criteria criteria);
 
     //총 게시물 수 조회
-    int getTotalCount();
+    int getTotalCount(Criteria criteria);
 
     //게시글 추천 기능
     void plusRec(int bulNum);

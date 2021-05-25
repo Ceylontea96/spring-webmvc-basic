@@ -19,7 +19,7 @@
     <p># 조회수 : ${board.views}</p>
     <p># 내용 : <br> ${board.content}</p>
 
-    <a href="/board/list">글 목록보기</a>
+    <a href="/board/list?page=${cri.page}&type=${cri.type}&keyword=${cri.keyword}&amount=${cri.amount}">글 목록보기</a>
     <a href="/board/modify?bulNum=${board.boardNo}&vf=false">글 수정하기</a>
 
     <form action="/board/recommend" method="POST">

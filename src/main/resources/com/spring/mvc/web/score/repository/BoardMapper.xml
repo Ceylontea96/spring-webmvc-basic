@@ -32,19 +32,34 @@
         SELECT * FROM board WHERE board_no = ${bulNum}
     </select>
 
-<!--    총 게시물 수 조회-->
+    <!--    총 게시물 수 조회-->
+    <!--    총 게시물 수 조회-->
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*)
         FROM board
+        <if test="type == 'title'">
+            WHERE title LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="type == 'writer'">
+            WHERE  writer LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="type == 'content'">
+            WHERE  content LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test="type == 'titleContent'">
+            WHERE  (title LIKE '%' || #{keyword} || '%'
+            OR content LIKE '%' || #{keyword} || '%')
+
+        </if>
     </select>
 
     <!--    1. 페이징 없는 버전    -->
-<!--    <select id="findAll" resultMap="boardMap">-->
-<!--        SELECT * FROM board ORDER BY board_no desc-->
-<!--    </select>-->
-<!--    2. 페이징 쿼리 적용    -->
+    <!--    <select id="findAll" resultMap="boardMap">-->
+    <!--        SELECT * FROM board ORDER BY board_no desc-->
+    <!--    </select>-->
+    <!--    2. 페이징 쿼리 적용    -->
     <select id="findAll" resultMap="boardMap">
-<!--        특수 기호를 사용하기 위해서는 <![CDATA[    ]]>로 감싸주면 됨-->
+        <!--        특수 기호를 사용하기 위해서는 <![CDATA[    ]]>로 감싸주면 됨-->
         <![CDATA[
         SELECT
             board_no, writer, title, content
@@ -56,6 +71,42 @@
         WHERE rn > (#{page} - 1) * #{amount}
         ]]>
     </select>
+
+    <!--    3. 검색 쿼리 + 페이징 쿼리 적용    -->
+    <select id="getSearchArticles" resultMap="boardMap">
+        <!--        특수 기호를 사용하기 위해서는 <![CDATA[    ]]>로 감싸주면 됨-->
+        <![CDATA[
+        SELECT
+            board_no, writer, title, content
+        FROM
+            (SELECT /*+INDEX_DESC(board pk_board)*/
+            rownum rn, board_no, writer, title, content, views
+            FROM board
+            WHERE
+            ]]>
+        <if test="type == 'title'">
+            title LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test="type == 'writer'">
+            writer LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test="type == 'content'">
+            content LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test="type == 'titleContent'">
+            (title LIKE '%' || #{keyword} || '%'
+            OR content LIKE '%' || #{keyword} || '%')
+            AND
+        </if>
+        <![CDATA[
+                rownum <= #{page} * #{amount} )
+        WHERE rn > (#{page} - 1) * #{amount}
+        ]]>
+    </select>
+    <!--    LIKE에 keyword가 String 타입으로 들어오니까('keyword'로 들어옴) 오라클에서 문자열을 더하는 방법인 ||를 이용해서 앞뒤에 %를 추가한다.-->
+    <!--    type(검색 조건)을 입력받으면 keyword와 마찬가지로 String으로 들어오기 때문에('type') #{type}과 같은 방법은 사용할 수 없다. -->
+    <!--    동적 SQL : if 태그를 사용하여 입력받은 type값에 따라 다른 sql문을 실행한다. if 태그를 사용하기 위해서는 중간에 CDATA를 한 번 끊어줘야 함(CDATA가 if문의 발동도 막음)-->
+    <!--    if test에서 한글자만 입력하면 String이 아니라 char 타입으로 인식하기 때문에 String으로 변환해주는 등 주의를 해줘야한다.-->
 
     <update id="change">
         UPDATE board
