@@ -1,5 +1,7 @@
 package com.spring.mvc.web.score.controller;
 
+import com.spring.mvc.web.common.paging.Criteria;
+import com.spring.mvc.web.common.paging.PageMaker;
 import com.spring.mvc.web.score.domain.Board;
 import com.spring.mvc.web.score.domain.DummyBoard;
 import com.spring.mvc.web.score.service.BoardService;
@@ -30,9 +32,11 @@ public class BoardController {
 
     //게시글 목록화면 요청
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Board> boardList = boardService.getBoardList();
-        model.addAttribute("boardList", boardList);
+    public String list(Criteria criteria, Model model) {
+        model.addAttribute("boardList", boardService.getBoardList(criteria));
+        //페이지 정보 만들어서 jsp에게 보내기
+        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotal()));
+
         return "board/list";
     }
 

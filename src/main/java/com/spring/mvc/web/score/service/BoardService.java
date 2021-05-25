@@ -1,5 +1,6 @@
 package com.spring.mvc.web.score.service;
 
+import com.spring.mvc.web.common.paging.Criteria;
 import com.spring.mvc.web.score.domain.Board;
 import com.spring.mvc.web.score.domain.DummyBoard;
 import com.spring.mvc.web.score.repository.BoardMapper;
@@ -30,8 +31,13 @@ public class BoardService {
     }
 
     // 게시글 목록을 받아오는 기능 (내림차순)
-    public List<Board> getBoardList() {
-        return boardRepository.findAll();
+    public List<Board> getBoardList(Criteria criteria) {
+        return boardRepository.findAll(criteria);
+    }
+
+    //총 게시물 수 확인
+    public int getTotal() {
+        return boardRepository.getTotalCount();
     }
 
     // 게시글 삭제 기능

@@ -68,10 +68,10 @@ public class ApiControllerV2 {
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("/boardlist")
-    public List<Board> list() {
-        return boardService.getBoardList();
-    }
+//    @GetMapping("/boardlist")
+//    public List<Board> list() {
+//        return boardService.getBoardList();
+//    }
 
 
 }

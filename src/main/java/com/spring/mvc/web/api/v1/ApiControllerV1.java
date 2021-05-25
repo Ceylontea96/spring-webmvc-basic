@@ -1,5 +1,6 @@
 package com.spring.mvc.web.api.v1;
 
+import com.spring.mvc.web.common.paging.Criteria;
 import com.spring.mvc.web.score.domain.Board;
 import com.spring.mvc.web.score.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +61,9 @@ public class ApiControllerV1 {
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("/boardlist")
-    @ResponseBody
-    public List<Board> list() {
-        return boardService.getBoardList();
-    }
+//    @GetMapping("/boardlist")
+//    @ResponseBody
+//    public List<Board> list() {
+//        return boardService.getBoardList(Criteria criteria);
+//    }
 }
