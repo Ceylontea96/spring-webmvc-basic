@@ -68,6 +68,8 @@
             text-decoration: none;
         }
     </style>
+
+    <%@ include file="../include/static-head.jsp" %>
 </head>
 
 <body>
@@ -149,6 +151,9 @@
         </form>
     </div>
     <a href="/board/register">게시글 작성하기</a>
+
+
+    <%@ include file="../include/footer.jsp" %>
 
 
 

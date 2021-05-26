@@ -33,7 +33,6 @@
     </select>
 
     <!--    총 게시물 수 조회-->
-    <!--    총 게시물 수 조회-->
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*)
         FROM board

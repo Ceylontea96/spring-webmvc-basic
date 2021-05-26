@@ -7,6 +7,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title></title>
+
+<%@ include file="../include/static-head.jsp" %>
+
 </head>
 <body>
 
@@ -29,5 +32,7 @@
             <button type="submit">추천</button>
         </div>
     </form>
+
+    <%@ include file="../include/footer.jsp" %>
 </body>
 </html>
