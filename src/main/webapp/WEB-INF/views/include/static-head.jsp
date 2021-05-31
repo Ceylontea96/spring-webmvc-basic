@@ -7,11 +7,12 @@
 
 <!-- Bootstrap JS -->
 <!-- header에 넣을거면 defer 넣는게 좋음 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" defer>
-    
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" defer></script>
 
+<!-- main CSS -->
+<link rel="stylesheet" href="/css/main.css">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>

@@ -47,7 +47,24 @@
     <!--        //특정 게시글 댓글 목록 조회-->
     <!--        List<Reply> getList(int boardNo);-->
     <select id="getList" resultMap="replyMap">
-        SELECT * FROM tbl_reply WHERE board_no = #{boardNo}
+        <![CDATA[
+         SELECT  reply_no, board_no, reply_text, reply_writer, reply_date
+         FROM
+           (
+            SELECT /*+INDEX(tbl_reply pk_reply) */
+              rownum rn,  reply_no, board_no, reply_text, reply_writer, reply_date
+            FROM tbl_reply
+            WHERE board_no =  #{bno}
+                AND rownum <= #{cri.page} * #{cri.amount}
+           )
+         WHERE rn > (#{cri.page} -1) * #{cri.amount}
+        ]]>
+    </select>
+
+<!--    //특정 게시글의 댓글 총 개수 조회-->
+<!--    int getCount(int boardNo);-->
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*) FROM tbl_reply WHERE board_no = #{boardNo}
     </select>
 
 

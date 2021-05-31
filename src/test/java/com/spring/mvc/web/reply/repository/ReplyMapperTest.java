@@ -69,16 +69,25 @@ class ReplyMapperTest {
 
     }
 
+    //해당 테스트 다시 사용하려면 getlist에 criteria 추가해야함
+//    @Test
+//    @DisplayName("특정 게시물의 댓글 목록을 조회할 수 있어야 한다.")
+//    void getListTest() {
+//
+//        List<Reply> replyList = replyMapper.getList(9);
+//
+//        System.out.println("======================================");
+//        for (Reply r : replyList) {
+//            System.out.println(r);
+//        }
+//
+//    }
+
     @Test
-    @DisplayName("특정 게시물의 댓글 목록을 조회할 수 있어야 한다.")
-    void getListTest() {
+    @DisplayName("특정 게시물의 댓글 수를 조회할 수 있어야 한다.")
+    void getCountTest() {
 
-        List<Reply> replyList = replyMapper.getList(9);
-
-        System.out.println("======================================");
-        for (Reply r : replyList) {
-            System.out.println(r);
-        }
-
+        int count = replyMapper.getCount(9);
+        System.out.println(count);
     }
 }

@@ -1,5 +1,6 @@
 package com.spring.mvc.web.reply.api;
 
+import com.spring.mvc.web.common.paging.Criteria;
 import com.spring.mvc.web.reply.domain.Reply;
 import com.spring.mvc.web.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/reply")
@@ -35,14 +37,18 @@ public class ReplyApiController {
      */
 
     //댓글 목록 조회 요청 처리
-    @GetMapping("/{bno}")
+    @GetMapping("/{bno}/{page}")
     //@Pathvariable("경로에서 무엇을 읽어올 것인지") 변수타입 변수명
-    public ResponseEntity<List<Reply>> getList(@PathVariable("bno") int boardNo) {
-        List<Reply> replies = replyService.getList(boardNo);
+    public ResponseEntity<Map<String, Object>> getList(
+            @PathVariable("bno") int boardNo
+            , @PathVariable("page") int page
+    ) {
+        Criteria criteria = new Criteria(page, 10);
+        Map<String, Object> replyMap = replyService.getList(boardNo, criteria);
         log.info("apl/v1/reply"+boardNo+" GET!!");
 
-        if (replies != null) {
-            return new ResponseEntity<>(replies, HttpStatus.OK);
+        if (replyMap != null) {
+            return new ResponseEntity<>(replyMap, HttpStatus.OK);
         } else {
             //리스트가 없으면 500 에러를 리턴
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -79,4 +85,6 @@ public class ReplyApiController {
                 ? new ResponseEntity<>("delSuccess", HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
