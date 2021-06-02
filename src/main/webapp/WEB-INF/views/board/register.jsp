@@ -10,6 +10,7 @@
     <title></title>
 
     <%@ include file="../include/static-head.jsp" %>
+    <%@ include file="../include/header.jsp" %>
 
 </head>
 
