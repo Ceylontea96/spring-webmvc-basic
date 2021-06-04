@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	//implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -32,13 +32,12 @@ dependencies {
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
 	//database 관련 라이브러리 추가
-	//jdbc 라이브러리
-	compile "org.springframework.boot:spring-boot-starter-jdbc"//<-스프링을 쓰기위한 JDBC
+	//spring jdbc 라이브러리
+	compile "org.springframework.boot:spring-boot-starter-jdbc"
 	//오라클 커넥트 라이브러리 (11g edition - gradle, maven 라이센스 문제 공식 지원 불가)
 	compile fileTree(dir: '/src/main/webapp/WEB-INF/lib', include: ['*.jar'])
 
-	//MyBatis(Spring) 라이브러리
-	//사용하기 위해서는 jdbc 라이브러리가 필요함
+	//마이바티스 라이브러리
 	compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0"
 
 	//스프링 시큐리티 라이브러리

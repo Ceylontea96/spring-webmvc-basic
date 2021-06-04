@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -40,7 +41,9 @@ public class BoardController {
 
     //게시글 작성화면 요청
     @GetMapping("/register")
-    public String list() {
+    public String list(HttpSession session) {
+
+
         return "board/register";
     }
 
@@ -77,6 +80,7 @@ public class BoardController {
     public String modify(int bulNum
             , @RequestParam("vf") boolean viewCntFlag
             , Model model
+            , HttpSession session
     ) {
         Board board = boardService.viewDetail(bulNum, viewCntFlag);
         model.addAttribute("board2", board);

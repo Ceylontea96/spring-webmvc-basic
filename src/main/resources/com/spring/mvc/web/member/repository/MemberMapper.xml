@@ -38,7 +38,23 @@
     </select>
 
 
+    <!--    //자동로그인 관련 기능-->
+    <!--    void saveKeepLogin();-->
+    <update id="saveKeepLogin">
+        UPDATE member
+        SET session_id = #{sid},
+        limit_time = #{lt}
+        WHERE account = #{acc}
+    </update>
 
+    <!--    //세션 아이디값을 통한 회원정보 조회기능-->
+    <!--    Member getUserBySessionId(String sessionId);-->
+    <!--    자동로그인을 했던 회원이 사이트 재방문시 로컬에 저장된 쿠키값과
+    데이터 베이스에 저장된 쿠키값이 일치하는 회원의 정보를 조회-->
+    <select id="getUserBySessionId" resultMap="userMap">
+        SELECT * FROM member
+        WHERE session_id = ${sessionId}
+    </select>
 
 
 </mapper>
