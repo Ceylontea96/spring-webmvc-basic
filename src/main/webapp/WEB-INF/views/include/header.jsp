@@ -13,7 +13,7 @@
 
         <c:if test="${loginUser != null}">
             <span style="margin-right: 20px;">${loginUser.name}님 하이~!</span>
-            <a href="/member/sign-in" class="btn btn-danger">로그아웃</a>
+            <a href="/member/logout" class="btn btn-danger">로그아웃</a>
         </c:if>
     </div>
 </header>
