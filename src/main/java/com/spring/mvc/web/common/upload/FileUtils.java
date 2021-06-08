@@ -78,10 +78,10 @@ public class FileUtils {
         if (getMediaType(ext) != null) {
             //이미지인 경우
             String thumbnailPath = makeThumbnail(newUploadPath, newFileName);
-            return thumbnailPath.substring(uploadPath.length());//기존 경로 제외
+            return thumbnailPath.substring(uploadPath.length()).replace("\\", "/");//기존 경로 제외
         } else {
             //이미지가 아닌 경우
-        return responseFileName;
+        return responseFileName.replace("\\", "/");
         }
     }
 
@@ -110,7 +110,8 @@ public class FileUtils {
     }
 
     //파일명에서 확장자를 추출해주는 메서드
-    private static String getFileExtension(String newFileName) {
+    //컨트롤러에서 사용하기 위해 public으로 풀어줌
+    public static String getFileExtension(String newFileName) {
         return newFileName.substring(newFileName.lastIndexOf(".") + 1);
     }
 
