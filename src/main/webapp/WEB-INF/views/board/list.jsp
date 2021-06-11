@@ -98,8 +98,12 @@
                 <tr>
                     <td>${board1.boardNo}</td>
                     <td>${board1.writer}</td>
-                    <td><a
-                            href="/board/detail${pageMaker.makeParam(pageMaker.criteria.page)}&bulNum=${board1.boardNo}&vf=true">${board1.title}</a>
+                    <td>
+                        <a href="/board/detail${pageMaker.makeParam(pageMaker.criteria.page)}&bulNum=${board1.boardNo}&vf=true">${board1.title}</a>
+                        <c:if test="${board.newArticle}">
+                            <span class="badge rounded-pill bg-danger"></span>
+                        </c:if>
+
                     </td>
                     <td>${board1.views}</td>
                     <td>${board1.recommend}</td>

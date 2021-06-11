@@ -18,6 +18,8 @@ public interface BoardMapper {
 
     // 게시글 조회 기능
     Board findOne(int bulNum);
+    // 게시글 첨부파일 경로 얻기
+    List<String> getFilePath(int boardNo);
 
     // 게시글 수정 기능
     void change(DummyBoard dummyBoard);
@@ -40,5 +42,10 @@ public interface BoardMapper {
 
     //조회수 증가 기능
     void plusViews(int bulNum);
+
+    //파일 첨부 기능
+    void addFile(String filePath);
+
+
 
 }

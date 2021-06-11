@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -72,7 +69,8 @@ public class FileUploadController {
         for (MultipartFile file : files) {
             String path = FileUtils.uploadFile(file, UPLOAD_PATH);
             pathList.add(path);
-        };
+        }
+        ;
 
         return new ResponseEntity<>(pathList, HttpStatus.OK);
     }
@@ -95,10 +93,10 @@ public class FileUploadController {
         if (!file.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
+        //2. 서버에 해당 파일이 저장되어 있다면 InputStream을 통해 파일을 로딩
         // 파일 관련 처리를 할 때는 필수적으로 예외처리를 해줘야 함
-        try {
-            //2. 서버에 해당 파일이 저장되어 있다면 InputStream을 통해 파일을 로딩
-            InputStream in = new FileInputStream(file);
+        // 스트림 사용 후 .close()로 닫아줘야 하는데 auto close를 사용하기 위해 try안에 넣어줌
+        try (InputStream in = new FileInputStream(file)) {
 
             //3. 응답 헤더에 파일의 컨텐츠 미디어 타입을 설정
             //   ex) image/gif, text/html, application/json
@@ -124,7 +122,7 @@ public class FileUploadController {
 
                 //첨부파일 형식으로 다운로드하도록 헤더에 설정 추가
                 //encoding된 파일명을 ""로 묶어줘야 하는데 인텔리제이에서 안넣어줘서 \"로 넣었음
-                headers.add("Content-Disposition", "attachment; filename=\""+ encoding + "\"");
+                headers.add("Content-Disposition", "attachment; filename=\"" + encoding + "\"");
             }
 
             //4. 파일데이터를 바이트배열형식으로 클라이언트에 전송
@@ -136,7 +134,49 @@ public class FileUploadController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
 
+    //서버에 저장된 파일을 삭제하는 비동기 요청처리
+    //URI: /deleteFile?fileName=/2021/06/09/w3ejo234isd_abc.txt
+    @DeleteMapping("/deleteFile")
+    @ResponseBody
+    public ResponseEntity<String> deleteFile(String fileName) throws IOException {
+
+        log.info("/deleteFile DELETE! - " + fileName);
+        //파일을 다룰때는 항상 예외처리하기
+        try {
+            //파일 삭제
+            //이 경우 이미지파일은 썸네일만 삭제되고 원본이 남게됨
+            File file = new File(UPLOAD_PATH + fileName);
+            log.info("img thumbnail delete DELETE! - " + UPLOAD_PATH + fileName);
+            file.delete();
+
+            //따라서 이미지인 경우 원본까지 지우도록 해야한다.
+            if (isImage(fileName)) {
+                //원본을 지우는 코드
+                //fileName => 썸네일 이미지 경로: /2021/06/09/s_sd1fj2o3si_abc.jpg
+                //originalName => 원본 이미지 경로: /2021/06/09/sd1fj2o3si_abc.jpg
+                int lastSlashIdx = fileName.lastIndexOf("/");
+                String originalName
+                        = fileName.substring(0, lastSlashIdx + 1)
+                        + fileName.substring(lastSlashIdx + 3);
+                File origin = new File(UPLOAD_PATH + originalName);
+                log.info("img delete DELETE! - " + originalName);
+                origin.delete();
+            }
+            return new ResponseEntity<>("fileDeleteSuccess", HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //이미지 판별
+    private boolean isImage(String fileName) {
+        //1. getFileExtension으로 파일 확장자를 추출하고
+        //2. 추출된 확장자가 이미지타입을 경우 getMediaType에 의해 값이 들어간다.
+        //3. 따라서 해당 결과가 null일 경우 이미지파일이 아니고, null이 아닐경우 이미지 파일이다.
+        return FileUtils.getMediaType(FileUtils.getFileExtension(fileName)) != null;
     }
 
 }

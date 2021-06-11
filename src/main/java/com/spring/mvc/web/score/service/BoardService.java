@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
 
-//    private final BoardRepository boardRepository;
+    //    private final BoardRepository boardRepository;
     private final BoardMapper boardRepository;
 
 //    @Autowired
@@ -26,14 +27,37 @@ public class BoardService {
 //    }
 
     // 게시글 저장 기능
+    @Transactional//트랜잭션 처리 자동화
     public void register(Board board) {
         boardRepository.save(board);
+
+        //만약에 첨부파일이 존재한다면 추가 쿼리를 동작해야 함
+        List<String> filePathList = board.getFilePathList();
+        if (filePathList != null) {
+            for (String path : filePathList) {
+                boardRepository.addFile(path);
+            }
+        }
     }
 
     // 게시글 목록을 받아오는 기능 (내림차순)
     public List<Board> getBoardList(Criteria criteria) {
 //        return boardRepository.findAll(criteria);
-        return boardRepository.getSearchArticles(criteria);
+        List<Board> articles = boardRepository.getSearchArticles(criteria);
+
+        //3분 이내 신규글 new카ㅡ 붙이기
+        for (Board article : articles) {
+            //각 게시물들의 등록시간 읽어오기 (밀리초)
+            long regTime = article.getRegDate().getTime();//getTime을 쓰면 시간을 밀리초로 가져옴
+            //현재시간 읽어오기 (밀리초)
+            long now = System.currentTimeMillis();
+            //3분이내(밀리초)면 신규게시글
+            if (now - regTime < 60 * 3 * 1000) {
+                article.setNewArticle(true);
+            }
+
+        }
+        return articles;
         //페이징, 검색 쿼리 적용버전
     }
 
@@ -54,9 +78,17 @@ public class BoardService {
     }
 
     // 게시글 조회 기능
+    @Transactional//트랜잭션 처리
     public Board viewDetail(int bulNum, boolean viewFlag) {
+        Board content = boardRepository.findOne(bulNum);
+
         if (viewFlag) boardRepository.plusViews(bulNum);//전달받은 viewFlag값이 true면 조회수를 1증가시킴
-        return boardRepository.findOne(bulNum);
+        return content;
+    }
+
+    //첨부파일 경로목록 구하기
+    public List<String> getFilePaths(int bulNum) {
+        return boardRepository.getFilePath(bulNum);
     }
 
     //게시글 추천 기능

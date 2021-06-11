@@ -2,12 +2,15 @@ package com.spring.mvc.web.score.controller;
 
 import com.spring.mvc.web.common.paging.Criteria;
 import com.spring.mvc.web.common.paging.PageMaker;
+import com.spring.mvc.web.common.upload.FileUtils;
 import com.spring.mvc.web.score.domain.Board;
 import com.spring.mvc.web.score.domain.DummyBoard;
 import com.spring.mvc.web.score.service.BoardService;
 //import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +53,7 @@ public class BoardController {
     //게시글 정보 저장 요청
     @PostMapping("/register")
     public String register(Board board) {
+        log.info("uploaded board " + board);
         boardService.register(board);
 
         return "redirect:/board/list";
@@ -59,6 +63,7 @@ public class BoardController {
     @GetMapping("/delete")
     public String delete(int bulNum) {
         boardService.delete(bulNum);
+
         return "redirect:/board/list";
     }
 
@@ -73,6 +78,14 @@ public class BoardController {
         model.addAttribute("board", board);
 //        model.addAttribute("cri", criteria);
         return "board/detail";
+    }
+
+    // 글 상세보기 요청에서 첨부파일 경로 리스트를 조회하는 비동기 요청
+    @GetMapping("/file/{boardNo}")
+    @ResponseBody
+    public ResponseEntity<List<String>> getFilePaths(@PathVariable int boardNo) {
+        log.info("/board/file/" + boardNo + " 비동기 GET 요청!");
+        return new ResponseEntity<>(boardService.getFilePaths(boardNo), HttpStatus.OK);
     }
 
     //게시글 수정 화면 요청

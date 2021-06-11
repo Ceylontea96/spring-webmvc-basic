@@ -28,12 +28,18 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+        text-decoration: none;
+        color: #000;
     }
 
     .uploaded-list a img {
         width: 100px;
         height: 100px;
         display: block;
+    }
+
+    .uploaded-list .thumbnail-box {
+        display: flex;
     }
     
 </style>
@@ -144,23 +150,42 @@
                 //원본 파일명 추출
                 let originFileName = path.substring(path.indexOf("_") + 1);
 
+                //썸네일 박스
+                const $div = document.createElement('div');
+                    $div.classList.add('thumbnail-box');
+
+                //삭제버튼
+                const $delBtn = document.createElement('a');
+                    $delBtn.classList.add('del-btn');
+                    $delBtn.setAttribute('href', path);
+                    $delBtn.textContent = 'X';
+
                 //이미지인지 확장자 체크
                 if (isImageFile(originFileName)) {
                     //이미지인 경우
                     //썸네일에 s_가 붙기 때문에 한 번 더 잘라줘야 함.
                     originFileName = originFileName.substring(originFileName.indexOf("_") + 1);
+
                     const $img = document.createElement('img');
                     $img.setAttribute('src', '/loadFile?fileName=' + path);
                     //대체 속성에는 원본 파일명
                     $img.setAttribute('alt', originFileName);
-                    $('.uploaded-list').append($img);
+
+                    $div.appendChild($img);
+                    $div.appendChild($delBtn);
+
                 } else {
                     //이미지가 아닌 경우: 다운로드 링크 생성
                     const $link = document.createElement('a');
                     $link.setAttribute('href', '/loadFile?fileName=' + path);
                     $link.innerHTML = '<img src="/img/file_icon.jpg" alt="파일아이콘"> <span class="file-name">' + originFileName + '</span>';
-                    $('.uploaded-list').append($link);
+
+                    $div.appendChild($link);
+                    $div.appendChild($delBtn);
+
                 }
+
+                $('.uploaded-list').append($div);
 
             };
 
@@ -169,6 +194,29 @@
                 const pattern = /jpg$|gif$|png$/i;
                 return originFileName.match(pattern);
             }
+
+            //파일 삭제 비동기 요청 클릭 이벤트
+            $('.uploaded-list').on('click', '.del-btn', e => {
+
+                //a태그의 기능을 막아놓지 않으면 GET으로 요청이 나감
+                e.preventDefault();
+                console.log(e.target.parentNode);
+                
+                const path = e.target.getAttribute('href')
+                
+                const $uploadedList = document.querySelector('.uploaded-list');
+
+                fetch('/deleteFile?fileName=' + path, {method:'DELETE'})
+                .then(res => res.text())
+                .then(msg => {
+                    if (msg === 'fileDeleteSuccess') {
+                        const $thumbBox = e.target.parentNode;
+                        $uploadedList.removeChild($thumbBox);
+                    } else {
+                        alert('파일 삭제 실패!');
+                    }
+                });
+            });
 
 
         });//end jQuery

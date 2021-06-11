@@ -12,6 +12,33 @@
     <%@ include file="../include/static-head.jsp" %>
     <%@ include file="../include/header.jsp" %>
 
+    <style>
+        .attach-file-list {
+           display: flex;
+           width: 80%;
+           border: 1px dashed gray;
+           margin: 20px auto;
+           padding: 20px 10px;
+
+        }
+  
+        .attach-file-list a {
+           display: flex;
+           flex-direction: column;
+        }
+  
+        .attach-file-list a img {
+           width: 100px;
+           height: 100px;
+           display: block;
+        }
+  
+        .attach-file-list .thumbnail-box {
+           display: flex;
+        }
+     </style>
+  
+
 </head>
 
 <body>
@@ -32,6 +59,11 @@
                     목록보기</a>&nbsp;
                 <a href="/board/modify?boardNo=${board.boardNo}&vf=false">글 수정하기</a>
             </div>
+        </div>
+
+        <!-- 첨부파일 영역 -->
+        <div class="row">
+            <div class="attach-file-list"></div>
         </div>
 
         <!-- 댓글 영역 -->
@@ -125,6 +157,74 @@
 
     <%@ include file="../include/footer.jsp" %>
 
+    <!-- 첨부파일 관련 스크립트 -->
+    <script>
+        $(function() {
+            //현재 글 번호
+            const boardNo = '${board.boardNo}';
+            const $attachDiv = $('.attach-file-list'); //첨부파일 배치할 영역
+
+            //첨부파일 경로 리스트
+            fetch('/board/file/' + boardNo)
+            .then(res => res.json())
+            .then(filePathList => {
+                console.log("filePathList test : " + filePathList);
+                showFileData(filePathList)
+            });
+
+             //드롭한 파일의 형식에 따라 태그를 만들어주는 함수
+             function showFileData(filePathList) {
+                //경로: \2021\06\08\dfjskfdjskf_dfjskfdj_dog.gif
+                for (let path of filePathList) {
+                    //이미지인지 아닌지에 따라 구분하여 처리
+                    checkExtType(path);
+                };
+            };
+
+            //확장자 판별 후 태그 생성 처리 함수
+            function checkExtType(path) {
+                //원본 파일명 추출
+                let originFileName = path.substring(path.indexOf("_") + 1);
+
+                const $div = document.createElement('div');
+                $div.classList.add('thumbnail-box');
+
+                //이미지인지 확장자 체크
+                if (isImageFile(originFileName)) {
+                    //이미지인 경우
+                    originFileName = originFileName.substring(originFileName.indexOf("_") + 1);
+
+                    const $img = document.createElement('img');
+                    $img.setAttribute('src', '/loadFile?fileName=' + path);
+                    $img.setAttribute('alt', originFileName);
+
+                    $div.appendChild($img);
+
+
+                } else {
+                    //이미지가 아닌 경우: 다운로드 링크 생성
+                    const $link = document.createElement('a');
+                    $link.setAttribute('href', '/loadFile?fileName=' + path);
+
+                    $link.innerHTML = '<img src="/img/file_icon.jpg" alt="파일아이콘"> <span class="file-name">' +
+                        originFileName + '</span>';
+
+                    $div.appendChild($link);
+                }
+                $attachDiv.append($div);
+            };
+
+            //정규표현식으로 이미지파일 여부 확인하는 함수
+            function isImageFile(originFileName) {
+                const pattern = /jpg$|gif$|png$/i;
+                return originFileName.match(pattern);
+            };
+
+
+        }); //end jQuery
+    </script>
+
+    <!-- 댓글 관련 스크립트 -->
     <SCript>
         // 댓글 처리 JS
         //$(function() {})으로 즉시실행 함수처럼 JQuery 영역을 만들어줌
@@ -226,18 +326,18 @@
                         "    </div>" +
                         " </div>";
 
-                    }
-                    //jQuery는 $('')안에 # 또는 . 등으로 아이디와 클래스를 지정해서 뽑아낸다.
-                    //만든 태그를 댓글목록 안에 배치
-                    $('#replyData').html(tag); //.html은 innerHtml과 같은 역할
+                }
+                //jQuery는 $('')안에 # 또는 . 등으로 아이디와 클래스를 지정해서 뽑아낸다.
+                //만든 태그를 댓글목록 안에 배치
+                $('#replyData').html(tag); //.html은 innerHtml과 같은 역할
 
-                    //댓글 수 배치
-                    // .text() 가 textContent와 같은역할
-                    console.log(replyMap.count);
-                    $('#replyCnt').text(replyMap.count);
+                //댓글 수 배치
+                // .text() 가 textContent와 같은역할
+                console.log(replyMap.count);
+                $('#replyCnt').text(replyMap.count);
 
-                    //페이지 태그 배치
-                    makePageInfo(replyMap.pageInfo);
+                //페이지 태그 배치
+                makePageInfo(replyMap.pageInfo);
 
             };
 
@@ -297,11 +397,11 @@
             $('#replyData').on('click', '#replyModBtn', e => {
                 // console.log("수정버튼 클릭!");
                 //모달 띄우기
-                $modal.modal('show');//부트스랩에서 .modal 함수 제공
+                $modal.modal('show'); //부트스랩에서 .modal 함수 제공
 
                 //기존 댓글내용 가져오기
                 const originText = e.target.parentNode.previousElementSibling.textContent;
-    
+
                 $('#modReplyText').val(originText);
 
                 //모달이 열릴 때 모달안에 댓글번호 넣어놓기
@@ -331,20 +431,20 @@
                         'content-type': 'application/json'
                     },
                     body: JSON.stringify({
-                        replyNo: replyId,//앞에는 자바 필드명으로 넣어줘야 함.
+                        replyNo: replyId, //앞에는 자바 필드명으로 넣어줘야 함.
                         replyText: replyText
                     })
                 }
-                fetch('/api/v1/reply/'+replyId, reqInfo)
-                .then(res => res.text())
-                .then(msg => {
-                    if (msg === 'modSuccess') {
-                        $modal.modal('hide');
-                        getReplyList(1);
-                    } else {
-                        alert("댓글 수정에 실패했습니다.");
-                    }
-                })
+                fetch('/api/v1/reply/' + replyId, reqInfo)
+                    .then(res => res.text())
+                    .then(msg => {
+                        if (msg === 'modSuccess') {
+                            $modal.modal('hide');
+                            getReplyList(1);
+                        } else {
+                            alert("댓글 수정에 실패했습니다.");
+                        }
+                    })
             });
 
             //댓글 삭제 비동기 요청 이벤트
@@ -359,16 +459,16 @@
 
                 if (!confirm("정말로 삭제하시겠습니까?")) {
                     return;
-                } 
-                fetch('/api/v1/reply/'+ replyId, reqInfo)
-                .then(res => res.text())
-                .then(msg => {
-                    if (msg === 'delSuccess') {
-                        getReplyList(1);
-                    } else {
-                        alert('댓글 삭제에 실패했습니다.');
-                    }
-                })
+                }
+                fetch('/api/v1/reply/' + replyId, reqInfo)
+                    .then(res => res.text())
+                    .then(msg => {
+                        if (msg === 'delSuccess') {
+                            getReplyList(1);
+                        } else {
+                            alert('댓글 삭제에 실패했습니다.');
+                        }
+                    })
             })
 
 

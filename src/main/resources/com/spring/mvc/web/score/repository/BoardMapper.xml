@@ -6,10 +6,20 @@
 
     <insert id="save">
         INSERT INTO board
-        (board_no, writer, title, content)
+        (board_no, title, content, writer)
         VALUES
-        (seq_board.nextval, #{writer}, #{title}, #{content})
+        (seq_board.nextval, #{title}, #{content}, #{writer})
     </insert>
+
+<!--    //파일 첨부 기능-->
+<!--    void addFile();-->
+    <insert id="addFile">
+        INSERT INTO file_upload
+        (file_path, board_no)
+        VALUES
+        (#{filePath}, seq_board.currval)
+    </insert>
+
 
     <delete id="remove">
         DELETE FROM board WHERE board_no = #{bulNum}
@@ -22,10 +32,17 @@
         <!--        property 속성에는 자바필드명, column은 테이블 컬럼명    -->
         <result property="boardNo" column="board_no"/>
         <result property="postTime" column="post_time"/>
+        <result property="regDate" column="reg_date"/>
     </resultMap>
 
     <select id="findOne" resultMap="boardMap">
         SELECT * FROM board WHERE board_no = ${bulNum}
+    </select>
+<!--    // 게시글 첨부파일 경로 얻기-->
+<!--    List<String> getFilePath(int boardNo);-->
+    <select id="getFilePath" resultType="string">
+        SELECT file_path FROM file_upload
+        WHERE board_no = #{boardNo}
     </select>
 
     <select id="viewMore" resultMap="boardMap">
@@ -76,10 +93,10 @@
         <!--        특수 기호를 사용하기 위해서는 <![CDATA[    ]]>로 감싸주면 됨-->
         <![CDATA[
         SELECT
-            board_no, writer, title, content
+            board_no, writer, title, content, reg_date
         FROM
             (SELECT /*+INDEX_DESC(board pk_board)*/
-            rownum rn, board_no, writer, title, content, views
+            rownum rn, board_no, writer, title, content, views, reg_date
             FROM board
             WHERE
             ]]>
